@@ -26,20 +26,18 @@ class TicTacGame:
         """validates user input and changes the board state if it is correct"""
         move_pattern = re.compile('[A-C] [1-3]')
         if not move_pattern.match(inp):
-            print(r'Input should have the valid format(Example "A 2")')
-            return True
+            raise ValueError(r'Input should have the valid format(Example "A 2")')
         row, col = inp.split()
         row = self.row_dict[row]
         col = int(col) - 1
         if self.board[row][col] != ' ':
-            print('Field is not empty')
-            return True
+            raise ValueError('Field is not empty')
         if self.player_switch:
             self.board[row][col] = 'x'
         else:
             self.board[row][col] = 'o'
         self.player_switch = not self.player_switch
-        return False
+        return True
 
     def check_winner(self):
         """checks winner from current board state"""
@@ -64,11 +62,14 @@ class TicTacGame:
         print("Game started: to make a move enter position coordinates (reference below).")
         print(self.reference)
         while True:
-            print("Make a move: ")
-            move = input()
-            while self.validate_input(move):
-                print("Make a move: ")
-                move = input()
+            while True:
+                try:
+                    print("Make a move: ")
+                    move = input()
+                    self.validate_input(move)
+                    break
+                except ValueError as err:
+                    print(err)
             self.show_board()
             winner = self.check_winner()
             if winner[0]:
@@ -80,4 +81,4 @@ class TicTacGame:
 
 if __name__ == '__main__':
     game = TicTacGame()
-    print(game.show_board())
+    print(game.start_game())
