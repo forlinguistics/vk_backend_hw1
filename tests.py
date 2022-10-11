@@ -34,7 +34,8 @@ class TicTacTestCase(unittest.TestCase):
         game.show_board()
         self.assertEqual(mock_stdout.getvalue(), EMPTY_OUTP + FILLED_OUTP)
 
-    def test_check_winner(self):
+    @staticmethod
+    def test_check_winner():
         """test check_winner method"""
         with patch('sys.stdout', new=io.StringIO()) as std_out:
             hor_win = ['B 1', 'A 1', 'B 2', 'A 2', 'B 3']
@@ -57,15 +58,17 @@ class TicTacTestCase(unittest.TestCase):
             game.validate_input('B 2')
             assert (game.check_winner() == (False, ' '))
 
+    @staticmethod
     @patch('builtins.input', side_effect=win_moves)
-    def test_start_game_win(self, mock_inputs):
+    def test_start_game_win(mock_inputs):
         """test start_game method with first player win scenario"""
         with patch('sys.stdout', new=io.StringIO()) as std_out:
             game = TicTacGame()
             assert game.start_game() == 'Game ended. Winner is x'
 
+    @staticmethod
     @patch('builtins.input', side_effect=draw_moves)
-    def test_start_game_draw(self, mock_inputs):
+    def test_start_game_draw(mock_inputs):
         """test start_game method with draw scenario"""
         with patch('sys.stdout', new=io.StringIO()) as std_out:
             game = TicTacGame()
